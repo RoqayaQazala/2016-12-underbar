@@ -248,26 +248,29 @@
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
   	return _.reduce(arguments,function(acc,arg){
-  		for(var k in arg){
-  			acc[k]=arg[k]
-  		}
-  	return acc;
-  	},obj);
-
+         for(var k in arg){
+             acc[k]=arg[k]
+         }
+     return acc;
+     },obj);
+  	
   	};
-// this is solution 
+// this is solution just
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
-  		return _.reduce(arguments,function(acc,arg){
-  		for(var k in obj){
-  	if(_.indexOf(arguments,arg.k)===false){
-  			 acc[k]=k;
-  	}
-  	return acc;
-  	},obj);
-  	}
+  	var obj1=arguments[0];
+
+  	_.each(arguments,function(val,i){
+  		_.each(val,function(ele,key){
+  			if(obj1[key]===undefined){
+  				obj1[key]=ele;
+  			}
+  		});
+  	});
+  	return obj1;
+  	};
 
 
 
@@ -311,6 +314,14 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+  	var obj={};
+  	return function(){
+  		var arg=JSON.stringify(arguments)
+  		if(obj[arg]=== undefined){
+  	 return obj[arg]= func.apply(this, arguments);
+  }	
+  }
+	return obj[arg];
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -320,7 +331,12 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
-  };
+  	var rr=Array.from(arguments);
+	rr=rr.slice(2)
+	var time=setTimeout(function(){func.apply(this,rr)
+	},wait)
+		return time;
+};
 
 
   /**
@@ -333,8 +349,25 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = function(array) {
-  };
+  /*_.shuffle = function(array) {
+  	var newarr = [];
+    var copy = array.slice(0, array.length);
+    for (var i = 0; i < array.length; i++) {
+      var random = Math.floor(Math.random() * copy.length);
+     newarr.push(copy[random]);
+      copy.splice(random, 1);
+    }
+    return newarr;
+ 
+  */
+    _.shuffle = function(array) {
+    	var newarr=[];
+    _.each(array,function(ele,i){
+		newarr.push(ele)    
+		 newarr.sort();  
+    })
+       return newarr;
+    };
 
 
   /**
