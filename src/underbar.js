@@ -197,59 +197,35 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-     if(collection.length!==0 && iterator!==undefined){
-     var x=_.filter(collection,function(val,i){
-     return iterator(val,i);
-     })
-     if(x.length===collection.length){return true;
-     }
-     return false;
-	}
-	else if(iterator===undefined){
-  	return _.reduce(collection,function(acc,x,i){
-    return acc&&x;
-  	},true)
-	}
-	return true;
-  	};
-
-  	
-  	 /* return _.reduce(collection,function(acc,item,i){
-  	  	if(collection.length=== 0 || iterator=== undefined){
-   	return true;
-   }
-    else if(typeof collection=== "object"){
-   			if(item!== undefined && typeof item=== typeof collection[i]){
-   			if(iterator!== undefined){
-   			return acc && iterator(acc,item);
-   	}
-   }
-   	else{ return false;
-   	}
-   },true);	
-  	
-}
-else return false;
-   }*/
+    if (collection === undefined) {
+      return true;
+    }
+    if(iterator === undefined){
+      iterator = _.identity;
+    }
+    return _.reduce(collection , function(acc, item){
+      return acc &&  !!iterator(item);
+    }, true)
+   }; 
   
+
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    if(collection.length===0){return false}
-     if(iterator===undefined){
-   var x= _.every(collection,iterator);
-   	return x &&true;
-   }
-   else{
-   	return _.reduce(collection,function(acc,x,i){
-    return acc||x;
-  	},false)
-   }
-
-
-  };
+    if(iterator === undefined){
+      iterator = _.identity;
+    }
+    var isAllFalse = _.every(collection, function(item) { 
+      return !iterator(item); 
+     }); 
+    if (isAllFalse === true) { 
+     return false; 
+         } 
+   	return true; 
+   
+  	};
 
 
   /**
@@ -284,8 +260,16 @@ else return false;
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+  		return _.reduce(arguments,function(acc,arg){
+  		for(var k in acc){	
+  	if(_.indexOf(arguments,arg.k)===false){
+  			 acc[k]=k;
+  	}
+  	return acc;
+  	},obj);
 
   };
+
 
 
   /**
