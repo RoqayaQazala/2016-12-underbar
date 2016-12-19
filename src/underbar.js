@@ -255,20 +255,19 @@
   	},obj);
 
   	};
- 
+// this is solution 
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
   		return _.reduce(arguments,function(acc,arg){
-  		for(var k in acc){	
+  		for(var k in obj){
   	if(_.indexOf(arguments,arg.k)===false){
   			 acc[k]=k;
   	}
   	return acc;
   	},obj);
-
-  };
+  	}
 
 
 
